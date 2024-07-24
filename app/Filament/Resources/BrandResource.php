@@ -4,27 +4,24 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
-use App\Models\Category;
+use App\Models\Brand;
+use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\CategoryResource\Pages;
+use App\Filament\Resources\BrandResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Set;
-use Illuminate\Support\Str;
+use App\Filament\Resources\BrandResource\RelationManagers;
 
-class CategoryResource extends Resource
+class BrandResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static ?string $model = Brand::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
-
-    protected static ?string $pollingInterval = '5s';
+    protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
     public static function form(Form $form): Form
     {
@@ -40,7 +37,7 @@ class CategoryResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->readOnly()
-                            ->unique(Category::class, 'slug', ignoreRecord: true),
+                            ->unique(Brand::class, 'slug', ignoreRecord: true),
                         Forms\Components\FileUpload::make('image')
                             ->image()
                             ->directory('categories'),
@@ -97,10 +94,10 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'view' => Pages\ViewCategory::route('/{record}'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => Pages\ListBrands::route('/'),
+            'create' => Pages\CreateBrand::route('/create'),
+            'view' => Pages\ViewBrand::route('/{record}'),
+            'edit' => Pages\EditBrand::route('/{record}/edit'),
         ];
     }
 }
