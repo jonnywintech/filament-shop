@@ -179,7 +179,7 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('currency')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('shipping_amount')
+                Tables\Columns\TextColumn::make('shipping_method')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -210,6 +210,16 @@ class OrderResource extends Resource
         return [
             //
         ];
+    }
+
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::count() > 10 ?'danger' : 'success';
+    }
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 
     public static function getPages(): array
