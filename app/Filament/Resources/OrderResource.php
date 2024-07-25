@@ -21,6 +21,7 @@ use Filament\Forms\Components\Placeholder;
 use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrderResource\RelationManagers;
+use App\Filament\Resources\OrderResource\RelationManagers\AddressRelationManager;
 
 class OrderResource extends Resource
 {
@@ -208,14 +209,14 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AddressRelationManager::class,
         ];
     }
 
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return static::getModel()::count() > 10 ?'danger' : 'success';
+        return static::getModel()::count() > 10 ? 'danger' : 'success';
     }
     public static function getNavigationBadge(): ?string
     {
