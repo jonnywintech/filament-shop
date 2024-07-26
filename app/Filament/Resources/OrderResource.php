@@ -178,7 +178,23 @@ class OrderResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('payment_status')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->icon(fn (string $state): string => match ($state) {
+                        'new' => 'heroicon-m-sparkles',
+                        'processing' => 'heroicon-m-arrow-path',
+                        'shipped' => 'heroicon-m-truck',
+                        'delivered' => 'heroicon-o-check-circle',
+                        'canceled' => 'heroicon-m-x-circle'
+                    })
+                    ->iconPosition('after')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'new' => 'info',
+                        'processing' => 'warning',
+                        'shipped' => 'info',
+                        'delivered' => 'success',
+                        'canceled' => 'danger'
+                    }),
                 Tables\Columns\TextColumn::make('currency')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('shipping_method')

@@ -11,7 +11,9 @@ class OrderStats extends BaseWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('New Orders', Order::query()->where('status' , 'new')->count())
+            Stat::make('New Orders', Order::query()->where('status' , 'new')->count()),
+            Stat::make('Processed Orders', Order::query()->where('status' , 'processing')->count()),
+            Stat::make('Shipped Orders', Order::query()->where('status' , 'shipped')->count())
         ];
     }
 }
