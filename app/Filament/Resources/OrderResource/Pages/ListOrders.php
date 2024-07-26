@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\OrderResource\Pages;
 
 use Filament\Actions;
+use Filament\Resources\Components\Tab;
+use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\OrderResource;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\OrderResource\Widgets\OrderStats;
@@ -22,6 +24,18 @@ class ListOrders extends ListRecords
     {
         return [
             OrderStats::class,
+        ];
+    }
+
+    public function getTabs(): array
+    {
+        return [
+            null => Tab::make('All'),
+            'new' => Tab::make()->query(fn (Builder $query): Builder => $query->where('status', 'new')),
+            'processed' => Tab::make()->query(fn (Builder $query): Builder => $query->where('status', 'processed')),
+            'shipped' => Tab::make()->query(fn (Builder $query): Builder => $query->where('status', 'shipped')),
+            'delivered' => Tab::make()->query(fn (Builder $query): Builder => $query->where('status', 'delivered')),
+            'canceled' => Tab::make()->query(fn (Builder $query): Builder => $query->where('status', 'canceled')),
         ];
     }
 }

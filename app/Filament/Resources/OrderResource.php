@@ -194,7 +194,9 @@ class OrderResource extends Resource
                         'shipped' => 'info',
                         'delivered' => 'success',
                         'canceled' => 'danger'
-                    }),
+                    })
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('currency')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('shipping_method')
