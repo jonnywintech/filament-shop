@@ -17,7 +17,7 @@ class Cartmanagment
         $existing_item = null;
 
         foreach ($cart_items as $key => $item) {
-            if ($item['$product_id'] == $product_id) {
+            if ($item['product_id'] == $product_id) {
                 $existing_item = $key;
                 break;
             }
