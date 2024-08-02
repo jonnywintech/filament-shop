@@ -27,6 +27,7 @@ class ProductSeeder extends Seeder
                 'is_featured' => false,
                 'in_stock' => true,
                 'on_sale' => false,
+                'created_at'=> now(),
             ],
             [
                 'category_id' => 1,
@@ -40,6 +41,8 @@ class ProductSeeder extends Seeder
                 'is_featured' => true,
                 'in_stock' => true,
                 'on_sale' => true,
+                'created_at'=> now(),
+
             ],
             [
                 'category_id' => 1,
@@ -53,7 +56,10 @@ class ProductSeeder extends Seeder
                 'is_featured' => false,
                 'in_stock' => true,
                 'on_sale' => false,
+                'created_at'=> now(),
+
             ],
+
         ]);
     }
 }

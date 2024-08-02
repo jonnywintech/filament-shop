@@ -26,6 +26,8 @@ class ProductsPage extends Component
     public string $on_sale;
 
     public string $price_range = '900';
+
+    public string $sort = '';
     public function render()
     {
         $productQuery = Product::query()->where('is_active', 1);
@@ -45,6 +47,12 @@ class ProductsPage extends Component
         }
         if(!empty($this->price_range)){
             $productQuery = $productQuery->where('price', '>=', $this->price_range);
+        }
+        if(!empty($this->sort)){
+           match($this->sort) {
+            'price' => $productQuery = $productQuery->orderBy('price', 'ASC'),
+            'latest' => $productQuery = $productQuery->orderBy('created_at', 'DESC'),
+           };
         }
 
         return view(
