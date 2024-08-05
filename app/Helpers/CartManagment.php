@@ -59,7 +59,7 @@ class CartManagment
 
         if ($existing_item !== null) {
             $cart_items[$existing_item]['quantity'] = $quantity;
-            $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] *
+            $cart_items[$existing_item]['total_amount'] = $quantity *
                 $cart_items[$existing_item]['unit_amount'];
         } else {
             $product = Product::where('id', $product_id)->first(['id', 'name', 'price', 'images']);
@@ -70,7 +70,7 @@ class CartManagment
                     'image' => $product->images[0],
                     'quantity' => $quantity,
                     'unit_amount' => $product->price,
-                    'total_amount' => $product->price,
+                    'total_amount' => $product->price * $quantity,
                 ];
             }
         }
@@ -83,7 +83,7 @@ class CartManagment
         $cart_items = self::getCartItemsFromCookie();
 
         foreach ($cart_items as $key => $item) {
-            if ($item['$product_id'] == $product_id) {
+            if ($item['product_id'] == $product_id) {
                 unset($cart_items[$key]);
             }
         }
@@ -116,12 +116,17 @@ class CartManagment
         self::addCartItemsToCookie($cart_items);
         return $cart_items;
     }
-    static public function decrementQuantityToCartItem(int $product_id): array
+    static public function decrementQuantityToCartItem(int $product_id): array|null
     {
         $cart_items = self::getCartItemsFromCookie();
 
         foreach ($cart_items as $key => $item) {
             if ($item['product_id'] == $product_id) {
+
+                if ($cart_items[$key]['quantity'] <= 1) {
+                    break;
+                }
+
                 $cart_items[$key]['quantity']--;
                 $cart_items[$key]['total_amount'] = $cart_items[$key]['quantity'] *
                     $cart_items[$key]['unit_amount'];
@@ -138,7 +143,7 @@ class CartManagment
         return $cart_items ? json_decode($cart_items, true) : [];
     }
 
-    static public function calculateGrandTotal(array $items): int
+    static public function calculateGrandTotal(array $items): int|float
     {
         return array_sum(array_column($items, 'total_amount'));
     }
