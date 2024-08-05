@@ -13,20 +13,20 @@ use App\Livewire\Partials\Navbar;
 class ProductDetailPage extends Component
 {
     use LivewireAlert;
-    public $slug;
+    public string $slug;
 
-    public $quantity = 1;
+    public int $quantity = 1;
 
-    public function mount($slug)
+    public function mount(string $slug): void
     {
         $this->slug = $slug;
     }
 
-    public function increaseQty()
+    public function increaseQty(): void
     {
         $this->quantity++;
     }
-    public function decreaseQty()
+    public function decreaseQty(): void
     {
         if ($this->quantity <= 1) {
             return;
@@ -34,9 +34,9 @@ class ProductDetailPage extends Component
         $this->quantity--;
     }
 
-    public function addToCart($id)
+    public function addToCart(int $id): void
     {
-        $total_count = CartManagment::addItemsToCart($id);
+        $total_count = CartManagment::addItemsToCartWithQty($id, $this->quantity);
 
         $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
 
