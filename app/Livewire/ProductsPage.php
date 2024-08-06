@@ -42,7 +42,7 @@ class ProductsPage extends Component
             'toast' => true,
         ]);
 
-        $this->dispatch('update-cart-count', total_count: $total_count)->to(Navbar::class);
+        $this->dispatch('update-cart-count', total_count: array_sum(array_column($total_count,'quantity')))->to(Navbar::class);
     }
     public function render()
     {

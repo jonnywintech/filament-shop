@@ -2,12 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Models\Category;
 use Livewire\Component;
 
 class CategoriesPage extends Component
 {
     public function render()
     {
-        return view('livewire.categories-page');
+        $categories = Category::all();
+
+        return view('livewire.categories-page', compact('categories'));
     }
 }
