@@ -1,5 +1,12 @@
 <div>
     <div class="w-full h-screen bg-gradient-to-r from-blue-200 to-cyan-200 py-10 px-4 sm:px-6 lg:px-8 mx-auto">
+        @if (session('status'))
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+                class="mt-2 bg-teal-500 text-sm text-white rounded-lg p-4" role="alert" tabindex="-1"
+                aria-labelledby="hs-solid-color-success-label">
+                <span id="hs-solid-color-success-label" class="font-bold">{{ session('status') }}</span>
+            </div>
+        @endif
         <div class="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Grid -->
             <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
