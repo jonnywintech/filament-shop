@@ -2,12 +2,33 @@
 
 namespace App\Livewire\Auth;
 
+use Illuminate\Support\Facades\Password;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class ForgotPasswordPage extends Component
 {
+    #[Title('Forgot Password')]
+
+    public string $email;
+
+    public function forgotPassword()
+    {
+        $this->validate([
+            'email' => 'required|email|exists:users,email| max:255',
+        ]);
+
+        $status = Password::sendResetLink(['email' => $this->email]);
+
+        if($status === Password::RESET_LINK_SENT){
+            session()->flash('success', 'Password reset link has been sent to your email address!');
+        }
+
+        // Send password reset email to user
+    }
     public function render()
     {
         return view('livewire.auth.forgot-password-page');
     }
 }
+
