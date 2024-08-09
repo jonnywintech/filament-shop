@@ -8,7 +8,7 @@ use Livewire\Component;
 use App\Models\Category;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
-use App\Helpers\Cartmanagment;
+use App\Helpers\CartManagment;
 use Livewire\Attributes\Title;
 use App\Livewire\Partials\Navbar;
 use Jantinnerezo\LivewireAlert\LivewireAlert;

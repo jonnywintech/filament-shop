@@ -16,7 +16,7 @@ use App\Livewire\ProductDetailPage;
 use App\Livewire\SuccessPage;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', HomePage::class);
+Route::get('/', HomePage::class)->name('home');
 Route::get('/categories', CategoriesPage::class);
 Route::get('/category/{slug}', CategoriesPage::class);
 Route::get('/products', ProductsPage::class);
@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-orders/{order}', MyOrderDetailPage::class)->name('my-orders.show');
     Route::get('/success', SuccessPage::class);
     Route::get('/cancel', CancelPage::class);
-    Route::get('/logout', function(){
+    Route::get('/logout', function () {
         auth()->logout();
         return redirect()->intended();
     });

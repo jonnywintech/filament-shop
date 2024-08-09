@@ -13,9 +13,12 @@ class SuccessPage extends Component
 
     public function mount()
     {
-        $this->order_id = 24;
+        $this->order_id = request()->query('order_id') ?? 0;
 
-        // session()->forget('order_id');
+        if ($this->order_id === 0) {
+            session()->flash('error', 'Error while getting order_id');
+            return redirect()->route('home');
+        }
     }
     public function render()
     {

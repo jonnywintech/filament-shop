@@ -36,7 +36,7 @@ class CheckoutPage extends Component
         $this->validate([
             'first_name' => 'required|string|min:3|max:255',
             'last_name' => 'required|string|min:3|max:255',
-            'phone' => 'required|numeric',
+            'phone' => 'required',
             'address' => 'required',
             'city' => 'required',
             'state' => 'required',
@@ -75,12 +75,10 @@ class CheckoutPage extends Component
         }
 
         $order->items()->createMany($cart_items);
-        Mail::to(request()->user())->send( new MailOrder($order));
+        Mail::to(request()->user())->send(new MailOrder($order));
         CartManagment::clearCartItems();
 
-        session()->flash('order_id', $order->id);
-
-        return redirect('/success');
+        return redirect('/success?order_id=' . $order->id);
     }
     public function render()
     {

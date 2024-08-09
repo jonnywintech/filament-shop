@@ -25,32 +25,35 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($orders as $order)
-                            @endforeach
-                            <tr wire:key="{{ $order->id }}"
-                                class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800">
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                    {{ $order->id }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {{ $order->created_at->format('Y-m-d') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-orange-500 py-1 px-3 rounded text-white shadow">{{ $order->status }}</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-green-500 py-1 px-3 rounded text-white shadow">{{ $order->payment_method }}</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    {{ $order->grand_total }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a wire:navigate href="/my-orders/{{ $order->id }}"
-                                        class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
-                                        Details</a>
-                                </td>
-                            </tr>
-
-
-
+                            @forelse ($orders as $order)
+                                <tr wire:key="{{ $order->id }}"
+                                    class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800">
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
+                                        {{ $order->id }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {{ $order->created_at->format('Y-m-d') ?? '' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        <span
+                                            class="bg-orange-500 py-1 px-3 rounded text-white shadow">{{ $order->status }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        <span
+                                            class="bg-green-500 py-1 px-3 rounded text-white shadow">{{ $order->payment_method }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                                        {{ $order->grand_total }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                        <a wire:navigate href="/my-orders/{{ $order->id }}"
+                                            class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
+                                            Details</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr colspan="6">
+                                    <h1>Order history is empty</h1>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
