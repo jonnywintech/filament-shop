@@ -60,4 +60,7 @@
             </div>
         </div>
     </div>
+    <div class="py-5">
+        {{ $orders->links() }}
+    </div>
 </div>
