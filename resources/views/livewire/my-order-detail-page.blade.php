@@ -86,8 +86,9 @@
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
-                        <span
-                            class="bg-yellow-500 py-1 px-3 rounded text-white shadow">{{ $order_details->status }}</span>
+
+                        <livewire:order-status :status="$order_details->status" />
+
                     </div>
                 </div>
             </div>
@@ -117,8 +118,7 @@
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
-                        <span
-                            class="bg-green-500 py-1 px-3 rounded text-white shadow">{{ $order_details->payment_status }}</span>
+                        <livewire:payment-status :status="$order_details->payment_status" />
                     </div>
                 </div>
             </div>

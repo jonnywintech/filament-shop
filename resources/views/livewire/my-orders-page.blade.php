@@ -34,12 +34,10 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                         {{ $order->created_at->format('Y-m-d') ?? '' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                        <span
-                                            class="bg-orange-500 py-1 px-3 rounded text-white shadow">{{ $order->status }}</span>
+                                            <livewire:order-status :status="$order->status" />
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                        <span
-                                            class="bg-green-500 py-1 px-3 rounded text-white shadow">{{ $order->payment_method }}</span>
+                                        <livewire:payment-status :status="$order->payment_status"/>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                                         {{ $order->grand_total }}</td>
