@@ -2,6 +2,7 @@
 
 use App\Livewire\Auth\ForgotPasswordPage;
 use App\Livewire\Auth\LoginPage;
+use App\Livewire\Auth\Logout;
 use App\Livewire\Auth\RegisterPage;
 use App\Livewire\Auth\ResetPasswordPage;
 use App\Livewire\CancelPage;
@@ -36,8 +37,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-orders/{order}', MyOrderDetailPage::class)->name('my-orders.show');
     Route::get('/success', SuccessPage::class);
     Route::get('/cancel', CancelPage::class);
-    Route::get('/logout', function () {
-        auth()->logout();
-        return redirect()->intended();
-    });
+    Route::post('/logout', Logout::class);
 });

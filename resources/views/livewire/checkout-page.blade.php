@@ -127,7 +127,7 @@
                     </div>
                     <ul class="grid w-full gap-6 md:grid-cols-2">
                         <li>
-                            <input class="hidden peer" id="hosting-small" wire:model="payment_method" required=""
+                            <input class="hidden peer" id="hosting-small" wire:model="payment_method"
                                 type="radio" value="cod" />
                             <label
                                 class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
@@ -146,7 +146,7 @@
                             </label>
                         </li>
                         <li>
-                            <input class="hidden peer" id="hosting-big" wire_model="payment_metod" type="radio"
+                            <input class="hidden peer" id="hosting-big" wire:model="payment_method" type="radio"
                                 value="stripe">
                             <label
                                 class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
@@ -166,6 +166,9 @@
                             </input>
                         </li>
                     </ul>
+                    @error('payment_method')
+                        <div class="text-red-500 text-sm"> {{ $message }}</div>
+                    @enderror
                 </div>
                 <!-- End Card -->
             </div>
