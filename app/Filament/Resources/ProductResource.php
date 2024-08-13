@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Filters\SelectFilter;
@@ -35,7 +36,7 @@ class ProductResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
+                            ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
                         Forms\Components\TextInput::make('slug')
                             ->unique(Product::class, 'slug', ignoreRecord: true)
                             ->required()
@@ -111,14 +112,10 @@ class ProductResource extends Resource
                     ->searchable(),
                 Tables\Columns\ImageColumn::make('images')
                     ->limit(1),
-                Tables\Columns\IconColumn::make('is_active')
-                    ->boolean(),
-                Tables\Columns\IconColumn::make('is_featured')
-                    ->boolean(),
-                Tables\Columns\IconColumn::make('in_stock')
-                    ->boolean(),
-                Tables\Columns\IconColumn::make('on_sale')
-                    ->boolean(),
+                Tables\Columns\ToggleColumn::make('is_active')->onColor('success')->offColor('danger'),
+                Tables\Columns\ToggleColumn::make('is_featured')->onColor('success')->offColor('danger'),
+                Tables\Columns\ToggleColumn::make('in_stock')->onColor('success')->offColor('danger'),
+                Tables\Columns\ToggleColumn::make('on_sale')->onColor('success')->offColor('danger'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -135,8 +132,19 @@ class ProductResource extends Resource
                     ->relationship('brand', 'name'),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Action::make('Preview')
+                    ->url(fn(Product $record): string => route('product.page', $record->slug))
+                    ->openUrlInNewTab()
+                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->disableLabel()
+                    ->tooltip('Preview in new tab'),
+                Tables\Actions\ViewAction::make()
+                    ->disableLabel()
+                    ->tooltip('View'),
+                Tables\Actions\EditAction::make()
+                    ->disableLabel()
+                    ->tooltip('Edit'),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
