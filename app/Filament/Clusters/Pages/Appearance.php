@@ -6,7 +6,9 @@ use App\Enums\Font;
 use App\Enums\PrimaryColor;
 use App\Enums\RecordsPerPage;
 use App\Enums\TableSortDirection;
+use App\Events\ShopConfigured;
 use App\Filament\Clusters\Settings;
+use App\Listeners\ConfigureShop;
 use App\Models\Appearance as AppearanceModel;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -41,7 +43,7 @@ class Appearance extends Page
 
     public ?array $data = [];
 
-    #[Locked]
+    // #[Locked]
     public ?AppearanceModel $record = null;
 
     public function getTitle(): string | Htmlable
@@ -81,11 +83,13 @@ class Appearance extends Page
     {
         try {
             $data = $this->form->getState();
-
-            $data['user_id'] = auth()->user()->id;
+            $user = auth()->user();
+            $appearance = AppearanceModel::where('user_id', $user->id)->first();
+            $data['user_id'] = $user->id;
 
             $this->handleRecordUpdate($this->record, $data);
 
+            ShopConfigured::dispatch($appearance);
         } catch (Halt $exception) {
             return;
         }
@@ -120,8 +124,8 @@ class Appearance extends Page
                     ->allowHtml()
                     ->options(
                         collect(PrimaryColor::cases())
-                            ->sort(static fn ($a, $b) => $a->value <=> $b->value)
-                            ->mapWithKeys(static fn ($case) => [
+                            ->sort(static fn($a, $b) => $a->value <=> $b->value)
+                            ->mapWithKeys(static fn($case) => [
                                 $case->value => "<span class='flex items-center gap-x-4'>
                                 <span class='rounded-full w-4 h-4' style='background:rgb(" . $case->getColor()[600] . ")'></span>
                                 <span>" . $case->getLabel() . '</span>
@@ -132,7 +136,7 @@ class Appearance extends Page
                     ->allowHtml()
                     ->options(
                         collect(Font::cases())
-                            ->mapWithKeys(static fn ($case) => [
+                            ->mapWithKeys(static fn($case) => [
                                 $case->value => "<span style='font-family:{$case->getLabel()}'>{$case->getLabel()}</span>",
                             ]),
                     ),
