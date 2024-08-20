@@ -122,6 +122,7 @@ class Appearance extends Page
             ->schema([
                 Select::make('primary_color')
                     ->allowHtml()
+                    ->native(false)
                     ->options(
                         collect(PrimaryColor::cases())
                             ->sort(static fn ($a, $b) => $a->value <=> $b->value)
@@ -134,6 +135,7 @@ class Appearance extends Page
                     ),
                 Select::make('font')
                     ->allowHtml()
+                    ->native(false)
                     ->options(
                         collect(Font::cases())
                             ->mapWithKeys(static fn ($case) => [
