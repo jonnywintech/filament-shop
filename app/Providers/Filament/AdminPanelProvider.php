@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Models\Appearance;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\Widgets;
@@ -23,15 +24,19 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $color = Appearance::where('user_id', 1)->first()->primary_color->getColor();
+        $font = Appearance::where('user_id', 1)->first()->font->getLabel();
+
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => $color,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
+            ->font($font)
             ->maxContentWidth(MaxWidth::Full)
             ->sidebarFullyCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

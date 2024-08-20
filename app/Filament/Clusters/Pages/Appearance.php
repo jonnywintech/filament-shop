@@ -124,8 +124,8 @@ class Appearance extends Page
                     ->allowHtml()
                     ->options(
                         collect(PrimaryColor::cases())
-                            ->sort(static fn($a, $b) => $a->value <=> $b->value)
-                            ->mapWithKeys(static fn($case) => [
+                            ->sort(static fn ($a, $b) => $a->value <=> $b->value)
+                            ->mapWithKeys(static fn ($case) => [
                                 $case->value => "<span class='flex items-center gap-x-4'>
                                 <span class='rounded-full w-4 h-4' style='background:rgb(" . $case->getColor()[600] . ")'></span>
                                 <span>" . $case->getLabel() . '</span>
@@ -136,7 +136,7 @@ class Appearance extends Page
                     ->allowHtml()
                     ->options(
                         collect(Font::cases())
-                            ->mapWithKeys(static fn($case) => [
+                            ->mapWithKeys(static fn ($case) => [
                                 $case->value => "<span style='font-family:{$case->getLabel()}'>{$case->getLabel()}</span>",
                             ]),
                     ),
