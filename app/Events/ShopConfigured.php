@@ -19,7 +19,7 @@ class ShopConfigured
     use InteractsWithSockets;
     use SerializesModels;
 
-    public AppearanceModel $appearance;
+    public ?AppearanceModel $appearance;
 
     public function __construct(AppearanceModel $appearance
     ) {
