@@ -84,7 +84,7 @@ class Appearance extends Page
         try {
             $data = $this->form->getState();
             $user = auth()->user();
-            $appearance = AppearanceModel::where('user_id', $user->id)->first();
+            $appearance = $this->record;
             $data['user_id'] = $user->id;
 
             $this->handleRecordUpdate($this->record, $data);
