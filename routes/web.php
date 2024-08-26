@@ -5,6 +5,7 @@ use App\Livewire\Auth\LoginPage;
 use App\Livewire\Auth\Logout;
 use App\Livewire\Auth\RegisterPage;
 use App\Livewire\Auth\ResetPasswordPage;
+use App\Livewire\Blog;
 use App\Livewire\CancelPage;
 use App\Livewire\CartPage;
 use App\Livewire\HomePage;
@@ -26,6 +27,7 @@ Route::get('/products', ProductsPage::class);
 Route::get('/cart', CartPage::class);
 Route::get('/products/{slug}', ProductDetailPage::class)->name('product.page');
 Route::get('/contact', ContactUs::class);
+Route::get('/blog', Blog::class);
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', RegisterPage::class)->name('register');
