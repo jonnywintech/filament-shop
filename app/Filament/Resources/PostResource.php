@@ -2,18 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PostResource\Pages;
-use App\Filament\Resources\PostResource\RelationManagers;
-use App\Filament\Resources\PostResource\RelationManagers\CategoriesRelationManager;
-use App\Filament\Resources\PostResource\RelationManagers\TagsRelationManager;
-use App\Models\Post;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\Post;
 use Filament\Tables;
+use Filament\Forms\Set;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Illuminate\Support\Str;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PostResource\RelationManagers;
+use App\Filament\Resources\PostResource\RelationManagers\TagsRelationManager;
+use App\Filament\Resources\PostResource\RelationManagers\CategoriesRelationManager;
 
 class PostResource extends Resource
 {
@@ -38,6 +40,16 @@ class PostResource extends Resource
                     ->preload()
                     ->required(),
                 Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->live(onBlur: true)
+                    ->unique(ignoreRecord: true)
+                    ->afterStateUpdated(
+                        function (string $operation, string $state, Set $set) {
+                            if ($operation === 'edit') return;
+                            $set('slug', Str::slug($state));
+                        }
+                    ),
+                Forms\Components\TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\RichEditor::make('content')
