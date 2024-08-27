@@ -1,24 +1,25 @@
 <?php
 
-use App\Livewire\Auth\ForgotPasswordPage;
-use App\Livewire\Auth\LoginPage;
-use App\Livewire\Auth\Logout;
-use App\Livewire\Auth\RegisterPage;
-use App\Livewire\Auth\ResetPasswordPage;
 use App\Livewire\Blog;
-use App\Livewire\CancelPage;
+use App\Livewire\Post;
 use App\Livewire\CartPage;
 use App\Livewire\HomePage;
-use App\Livewire\ProductsPage;
-use App\Livewire\CategoriesPage;
-use App\Livewire\CheckoutPage;
 use App\Livewire\ContactUs;
 use App\Livewire\MyAccount;
-use App\Livewire\MyOrderDetailPage;
-use App\Livewire\MyOrdersPage;
-use App\Livewire\ProductDetailPage;
+use App\Livewire\CancelPage;
+use App\Livewire\Auth\Logout;
 use App\Livewire\SuccessPage;
+use App\Livewire\CheckoutPage;
+use App\Livewire\MyOrdersPage;
+use App\Livewire\ProductsPage;
+use App\Livewire\Auth\LoginPage;
+use App\Livewire\CategoriesPage;
+use App\Livewire\Auth\RegisterPage;
+use App\Livewire\MyOrderDetailPage;
+use App\Livewire\ProductDetailPage;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Auth\ResetPasswordPage;
+use App\Livewire\Auth\ForgotPasswordPage;
 
 Route::get('/', HomePage::class)->name('home');
 Route::get('/categories', CategoriesPage::class);
@@ -28,6 +29,7 @@ Route::get('/cart', CartPage::class);
 Route::get('/products/{slug}', ProductDetailPage::class)->name('product.page');
 Route::get('/contact', ContactUs::class);
 Route::get('/blog', Blog::class);
+Route::get('/blog/{slug}', Post::class);
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', RegisterPage::class)->name('register');

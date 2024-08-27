@@ -138,7 +138,6 @@ class OrderResource extends Resource
                                 ->dehydrated()
                                 ->required()
                                 ->columnSpan(3),
-
                         ])->columns(12),
 
                     Placeholder::make('grand_total_placeholder')
