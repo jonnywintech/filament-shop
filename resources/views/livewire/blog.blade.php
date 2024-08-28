@@ -84,7 +84,7 @@
             @foreach ($posts as $post)
                 <a wire:key="{{ $post->id }}" wire:navigate
                     class="group relative flex flex-col w-full min-h-60 bg-[url('{{ url('storage') . '/' . $post->cover_image }}')] bg-center bg-cover rounded-xl hover:shadow-lg focus:outline-none focus:shadow-lg transition"
-                    href="#">
+                    href="/blog/{{ $post->slug }}">
                     <div class="flex-auto p-4 md:p-6">
                         <h3 class="text-xl text-white/90 group-hover:text-white"><span
                                 class="font-bold">{{ $post->title }}</span>

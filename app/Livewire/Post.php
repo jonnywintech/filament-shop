@@ -2,20 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Models\Post as PostModel;
 use Livewire\Component;
 
 class Post extends Component
 {
 
-    public Post $post;
-    public function construct($slug)
+    public PostModel $post;
+
+    public function mount(string $slug)
     {
-        $post = Post::where('slug', $slug)->get();
+        $post = PostModel::where('slug', $slug)->first();
 
         $this->post = $post;
     }
     public function render()
     {
-        return view('livewire.post', compact('post'));
+        return view('livewire.post', ['post' => $this->post]);
     }
 }
