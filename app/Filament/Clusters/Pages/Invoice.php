@@ -63,7 +63,7 @@ class Invoice extends Page
 
     public function mount(): void
     {
-        $this->record = AppearanceModel::firstOrNew([
+        $this->record = Invoice::firstOrNew([
             'user_id' => auth()->user()->id,
         ]);
 
