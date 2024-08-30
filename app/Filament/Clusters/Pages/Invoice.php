@@ -25,6 +25,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Attributes\Locked;
+use App\Models\Invoice as InvoiceModel;
 
 use function Filament\authorize;
 
@@ -44,7 +45,7 @@ class Invoice extends Page
     public ?array $data = [];
 
     // #[Locked]
-    public ?AppearanceModel $record = null;
+    public ?InvoiceModel $record = null;
 
     public function getTitle(): string | Htmlable
     {
@@ -63,7 +64,7 @@ class Invoice extends Page
 
     public function mount(): void
     {
-        $this->record = Invoice::firstOrNew([
+        $this->record = InvoiceModel::firstOrNew([
             'user_id' => auth()->user()->id,
         ]);
 
