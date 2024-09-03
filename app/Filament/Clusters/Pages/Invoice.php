@@ -3,30 +3,34 @@
 namespace App\Filament\Clusters\Pages;
 
 use App\Enums\Font;
-use App\Enums\PrimaryColor;
-use App\Enums\RecordsPerPage;
-use App\Enums\TableSortDirection;
-use App\Events\ShopConfigured;
-use App\Filament\Clusters\Settings;
-use App\Listeners\ConfigureShop;
-use App\Models\Appearance as AppearanceModel;
-use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
-use Filament\Forms\Components\Component;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
-use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Support\Exceptions\Halt;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Database\Eloquent\Model;
+use App\Enums\PrimaryColor;
+use Filament\Actions\Action;
+use App\Enums\RecordsPerPage;
+use App\Events\ShopConfigured;
 use Livewire\Attributes\Locked;
-
+use App\Listeners\ConfigureShop;
 use function Filament\authorize;
+use App\Enums\TableSortDirection;
+use Filament\Actions\ActionGroup;
+use App\Filament\Clusters\Settings;
+use Filament\Support\Enums\MaxWidth;
+use Filament\Forms\Components\Select;
+use Filament\Support\Exceptions\Halt;
+use Filament\Forms\Components\Section;
+use App\Models\Invoice as InvoiceModel;
+use Filament\Forms\Components\Checkbox;
+use Illuminate\Database\Eloquent\Model;
+use Filament\Forms\Components\Component;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Contracts\Support\Htmlable;
+
+use App\Models\Appearance as AppearanceModel;
+use Illuminate\Auth\Access\AuthorizationException;
+use Filament\Pages\Concerns\InteractsWithFormActions;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 /**
  * @property Form $form
@@ -44,7 +48,7 @@ class Invoice extends Page
     public ?array $data = [];
 
     // #[Locked]
-    public ?AppearanceModel $record = null;
+    public ?InvoiceModel $record = null;
 
     public function getTitle(): string | Htmlable
     {
@@ -63,7 +67,7 @@ class Invoice extends Page
 
     public function mount(): void
     {
-        $this->record = Invoice::firstOrNew([
+        $this->record = InvoiceModel::firstOrNew([
             'user_id' => auth()->user()->id,
         ]);
 
@@ -109,7 +113,6 @@ class Invoice extends Page
         return $form
             ->schema([
                 $this->getGeneralSection(),
-                $this->getDataPresentationSection(),
             ])
             ->model($this->record)
             ->statePath('data')
@@ -125,8 +128,8 @@ class Invoice extends Page
                     ->native(false)
                     ->options(
                         collect(PrimaryColor::cases())
-                            ->sort(static fn ($a, $b) => $a->value <=> $b->value)
-                            ->mapWithKeys(static fn ($case) => [
+                            ->sort(static fn($a, $b) => $a->value <=> $b->value)
+                            ->mapWithKeys(static fn($case) => [
                                 $case->value => "<span class='flex items-center gap-x-4'>
                                 <span class='rounded-full w-4 h-4' style='background:rgb(" . $case->getColor()[600] . ")'></span>
                                 <span>" . $case->getLabel() . '</span>
@@ -138,25 +141,37 @@ class Invoice extends Page
                     ->native(false)
                     ->options(
                         collect(Font::cases())
-                            ->mapWithKeys(static fn ($case) => [
+                            ->mapWithKeys(static fn($case) => [
                                 $case->value => "<span style='font-family:{$case->getLabel()}'>{$case->getLabel()}</span>",
                             ]),
                     ),
+                FileUpload::make('logo')
+                    ->openable()
+                    ->maxSize(1024)
+                    ->visibility('public')
+                    ->disk('public')
+                    ->directory('logos/document')
+                    ->imageResizeMode('contain')
+                    ->imageCropAspectRatio('3:2')
+                    ->panelAspectRatio('3:2')
+                    ->panelLayout('integrated')
+                    ->removeUploadedFileButtonPosition('center bottom')
+                    ->uploadButtonPosition('center bottom')
+                    ->uploadProgressIndicatorPosition('center bottom')
+                    ->getUploadedFileNameForStorageUsing(
+                        static fn(TemporaryUploadedFile $file): string => (string) str($file->getClientOriginalName())
+                            ->prepend(auth()->user()->id . '_'),
+                    )
+                    ->extraAttributes([
+                        'class' => 'aspect-[3/2] w-[9.375rem] max-w-full',
+                    ])
+                    ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/gif']),
+                Checkbox::make('show_logo')
+                ->live(),
             ])->columns();
     }
 
-    protected function getDataPresentationSection(): Component
-    {
-        return Section::make('Data Presentation')
-            ->schema([
-                Select::make('table_sort_direction')
-                    ->options(TableSortDirection::class),
-                Select::make('records_per_page')
-                    ->options(RecordsPerPage::class),
-            ])->columns();
-    }
-
-    protected function handleRecordUpdate(AppearanceModel $record, array $data): AppearanceModel
+    protected function handleRecordUpdate(InvoiceModel $record, array $data): InvoiceModel
     {
         $record->fill($data);
 
