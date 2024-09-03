@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class invoice-layout extends Component
+class InvoiceLayout extends Component
 {
     /**
      * Create a new component instance.
