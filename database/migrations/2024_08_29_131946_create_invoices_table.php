@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->boolean('show_logo')->default(false);
             $table->string('logo')->nullable();
             $table->string('filename')->nullable();
-            $table->string('primary_color')->default(PrimaryColor::DEFAULT);
+            $table->string('color')->default(PrimaryColor::DEFAULT);
             $table->string('font')->default(Font::DEFAULT);
-            $table->foreignId('order_id')->constrained();
             $table->timestamps();
         });
     }

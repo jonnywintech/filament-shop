@@ -6,6 +6,7 @@ use App\Enums\Font;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use App\Enums\PrimaryColor;
+use Livewire\Attributes\On;
 use Filament\Actions\Action;
 use App\Enums\RecordsPerPage;
 use App\Events\ShopConfigured;
@@ -25,8 +26,9 @@ use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\Component;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
-use Illuminate\Contracts\Support\Htmlable;
 
+use Filament\Forms\Components\ColorPicker;
+use Illuminate\Contracts\Support\Htmlable;
 use App\Models\Appearance as AppearanceModel;
 use Illuminate\Auth\Access\AuthorizationException;
 use Filament\Pages\Concerns\InteractsWithFormActions;
@@ -47,9 +49,19 @@ class Invoice extends Page
 
     public ?array $data = [];
 
-    // #[Locked]
+    #[Locked]
     public ?InvoiceModel $record = null;
 
+
+    public function logo(): mixed
+    {
+        return current($this->data['logo']) ?? '';
+    }
+
+    public function showLogo(): bool
+    {
+        return $this->data['show_logo'] ?? false;
+    }
     public function getTitle(): string | Htmlable
     {
         return static::$title;
@@ -71,6 +83,7 @@ class Invoice extends Page
             'user_id' => auth()->user()->id,
         ]);
 
+        // dd($this->record);
         abort_unless(static::canView($this->record), 404);
 
         $this->fillForm();
@@ -81,6 +94,9 @@ class Invoice extends Page
         $data = $this->record->attributesToArray();
 
         $this->form->fill($data);
+
+        $this->data['font'] = $data['font'] ?? Font::DEFAULT;
+        $this->data['color'] = $data['color'] ?? PrimaryColor::DEFAULT;
     }
 
     public function save(): void
@@ -92,8 +108,9 @@ class Invoice extends Page
             $data['user_id'] = $user->id;
 
             $this->handleRecordUpdate($this->record, $data);
+            $this->dispatch('update-font');
 
-            ShopConfigured::dispatch($appearance);
+            // ShopConfigured::dispatch($appearance);
         } catch (Halt $exception) {
             return;
         }
@@ -123,25 +140,13 @@ class Invoice extends Page
     {
         return Section::make('General')
             ->schema([
-                Select::make('primary_color')
-                    ->allowHtml()
-                    ->native(false)
-                    ->options(
-                        collect(PrimaryColor::cases())
-                            ->sort(static fn($a, $b) => $a->value <=> $b->value)
-                            ->mapWithKeys(static fn($case) => [
-                                $case->value => "<span class='flex items-center gap-x-4'>
-                                <span class='rounded-full w-4 h-4' style='background:rgb(" . $case->getColor()[600] . ")'></span>
-                                <span>" . $case->getLabel() . '</span>
-                                </span>',
-                            ]),
-                    ),
+                ColorPicker::make('color')->label('Pick Accent color'),
                 Select::make('font')
                     ->allowHtml()
                     ->native(false)
                     ->options(
                         collect(Font::cases())
-                            ->mapWithKeys(static fn($case) => [
+                            ->mapWithKeys(static fn ($case) => [
                                 $case->value => "<span style='font-family:{$case->getLabel()}'>{$case->getLabel()}</span>",
                             ]),
                     ),
@@ -167,7 +172,7 @@ class Invoice extends Page
                     ])
                     ->acceptedFileTypes(['image/png', 'image/jpeg', 'image/gif']),
                 Checkbox::make('show_logo')
-                ->live(),
+                    ->live(),
             ])->columns();
     }
 
@@ -181,7 +186,7 @@ class Invoice extends Page
         ];
 
         if ($record->isDirty($keysToWatch)) {
-            $this->dispatch('appearanceUpdated');
+            // $this->dispatch('appearanceUpdated');
         }
 
         $record->save();

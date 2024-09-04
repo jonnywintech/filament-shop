@@ -1,8 +1,28 @@
-<div class="bg-white dark:bg-slate-700 p-5">
-    <h2 class="text-2xl pt-2 pe-3 pb-4 text-end dark:text-white">{{env('APP_NAME')}}</h2>
+@props(['font', 'color', 'logo', 'show_logo'])
+<div class="inv-paper bg-white dark:bg-slate-700 p-8 shadow-lg dark:shadow-none">
+    <style>
+        .inv-paper {
+            font-family: '{{ $font }}', sans-serif;
+        }
+
+        .accent {
+            background-color: {{ $color }};
+        }
+    </style>
+    <div class="flex flex-col md:flex-row">
+        <div class="md:w-1/2 p-4">
+            @if ($logo && $show_logo)
+                <x-invoice.logo class="ml-6" :src="url('storage') . '/' . $logo" />
+            @endif
+        </div>
+        <div class="md:w-1/2 p-4">
+
+
+            <h2 class="text-2xl pt-2 pe-3 pb-4 text-end dark:text-white">{{ env('APP_NAME') }}</h2>
+        </div>
+    </div>
     <hr class="dark:border-white">
     <h1 class="text-6xl py-5 pb-10 text-start dark:text-white">Invoice</h1>
-
     <h3 class="text-2xl dark:text-white">BILL TO</h3>
     <h3 class="text-3xl dark:text-white text-bold">Customer Name</h3>
     <div class="flex flex-col md:flex-row">
@@ -31,7 +51,7 @@
         </div>
     </div>
     <table class="w-full mb-6">
-        <thead class="bg-blue-500 text-white">
+        <thead class="accent dark:text-white">
             <tr>
                 <th class="p-2 text-left">Items</th>
                 <th class="p-2 text-right">Quantity</th>
