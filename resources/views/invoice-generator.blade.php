@@ -1,4 +1,3 @@
-@props(['font', 'color', 'logo', 'show_logo', 'invoice_data'])
 <div class="inv-paper bg-white dark:bg-slate-700 p-8 shadow-lg dark:shadow-none">
     <style>
         .inv-paper {

@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\OrderResource\Pages;
 
-use App\Filament\Resources\OrderResource;
+use App\Models\Order;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
+use App\Filament\Resources\OrderResource;
 
 class ViewOrder extends ViewRecord
 {
@@ -13,6 +14,9 @@ class ViewOrder extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('Process Order')
+            ->url(fn(Order $order) => route('generate.pdf', $order))
+            ->openUrlInNewTab(),
             Actions\EditAction::make(),
         ];
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InvoicePdfController;
 use App\Livewire\Blog;
 use App\Livewire\Post;
 use App\Livewire\CartPage;
@@ -30,6 +31,8 @@ Route::get('/products/{slug}', ProductDetailPage::class)->name('product.page');
 Route::get('/contact', ContactUs::class);
 Route::get('/blog', Blog::class);
 Route::get('/blog/{slug}', Post::class);
+
+Route::get('/generate-pdf', InvoicePdfController::class)->name('generate.pdf');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', RegisterPage::class)->name('register');
