@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Spatie\LaravelPdf\Facades\Pdf;
 use Spatie\Browsershot\Browsershot;
+use Illuminate\Support\Facades\Storage;
 
 class InvoicePdfController extends Controller
 {
@@ -26,9 +27,10 @@ class InvoicePdfController extends Controller
             ->withBrowsershot(function (Browsershot $browsershot) {
                 $browsershot->setNodeBinary("C:\\laragon\\bin\\nodejs\\node-v20.15.0-win-x64\\node.exe")
                     ->setNpmBinary("C:\\laragon\\bin\\nodejs\\node-v20.15.0-win-x64\\node_modules\\npm\\bin")
-                    ->setNodeModulePath("C:\\laragon\\www\\filament-shop\\node_modules");
+                    ->setNodeModulePath("C:\\laragon\\www\\filament-shop\\node_modules")
+                    ->noSandbox();
             })
             ->format('a4')
-            ->save('invoice.pdf');
+            ->save(Storage::disk('public')->path("invoice.pdf"));
     }
 }
