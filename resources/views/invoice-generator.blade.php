@@ -11,7 +11,7 @@
 <body>
     <div class="inv-paper bg-white dark:bg-slate-700 p-8">
         <style>
-            .inv-paper {
+            * {
                 font-family: '{{ $font }}', sans-serif;
             }
 
@@ -63,7 +63,7 @@
                             @if ($order->payment_status === 'paid')
                                 {{ \Carbon\Carbon::parse($order->created_at)->format('Y/m/d') }}
                             @else
-                                {{ date('Y/m/d') }}
+                            {{ \Carbon\Carbon::parse($order->created_at)->addDays(7)->format('Y/m/d') }}
                             @endif
                         </span>
                     </li>
