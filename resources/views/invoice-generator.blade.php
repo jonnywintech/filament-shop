@@ -1,52 +1,71 @@
-<div class="inv-paper bg-white dark:bg-slate-700 p-8 shadow-lg dark:shadow-none">
-    <style>
-        .inv-paper {
-            font-family: '{{ $font }}', sans-serif;
-        }
+<!DOCTYPE html>
+<html lang="en">
 
-        .accent {
-            background-color: {{ $color }};
-        }
-    </style>
-    <div class="flex flex-col md:flex-row">
-        <div class="md:w-1/2 p-4">
-            @if ($logo && $show_logo)
-                <x-invoice.logo class="ml-6" :src="url('storage') . '/' . $logo" />
-            @endif
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="inv-paper bg-white dark:bg-slate-700 p-8">
+        <style>
+            .inv-paper {
+                font-family: '{{ $font }}', sans-serif;
+            }
+
+            .accent {
+                background-color: {{ $color }};
+            }
+        </style>
+        <div class="flex flex-col md:flex-row">
+            <div class="md:w-1/2 p-4">
+                @if ($logo && $show_logo)
+                    <x-invoice.logo class="ml-6" :src="url('storage') . '/' . $logo" />
+                @endif
+            </div>
+            <div class="md:w-1/2 p-4">
+
+
+                <h2 class="text-2xl pt-2 pe-3 pb-4 text-end dark:text-white">{{ env('APP_NAME') }}</h2>
+            </div>
         </div>
-        <div class="md:w-1/2 p-4">
-
-
-            <h2 class="text-2xl pt-2 pe-3 pb-4 text-end dark:text-white">{{ env('APP_NAME') }}</h2>
-        </div>
-    </div>
-    <hr class="dark:border-white">
-    <h1 class="text-6xl py-5 pb-10 text-start dark:text-white">Invoice</h1>
-    <h3 class="text-2xl dark:text-white">BILL TO</h3>
-    @forelse ($invoice_data as $djata)
-    @empty
-        <h3 class="text-3xl dark:text-white text-bold">Customer Name</h3>
+        <hr class="dark:border-white">
+        <h1 class="text-6xl py-5 pb-10 text-start dark:text-white">Invoice</h1>
+        <h3 class="text-xl dark:text-white">Bill to:</h3>
+        <h3 class="text-3xl dark:text-white font-bold">
+            {{ $order->address->first_name }}
+            {{ $order->address->last_name }}
+        </h3>
         <div class="flex flex-col md:flex-row">
             <div class="md:w-1/2 p-4">
                 <ul class="list-none">
-                    <li>123 Main Street</li>
-                    <li>New York, New York 10001</li>
-                    <li>United States</li>
+                    <li>{{ $order->address->street_address }}</li>
+                    <li>{{ $order->address->city }}</li>
+                    <li>{{ $order->address->state }}</li>
                 </ul>
             </div>
             <div class="md:w-1/2 p-4">
                 <ul class="list-none">
                     <li class="mb-2">
                         <span class="font-bold">Invoice Number:</span>
-                        <span class="ml-2">INV-00001</span>
+                        <span class="ml-2">INV-{{ $order->id }}</span>
                     </li>
                     <li class="mb-2">
                         <span class="font-bold">Invoice Date:</span>
-                        <span class="ml-2">Sep 3, 2024</span>
+                        <span class="ml-2">{{ date('Y/m/d') }}</span>
+
                     </li>
                     <li>
                         <span class="font-bold">Payment Due:</span>
-                        <span class="ml-2">Sep 3, 2024</span>
+                        <span class="ml-2">
+                            @if ($order->payment_status === 'paid')
+                                {{ \Carbon\Carbon::parse($order->created_at)->format('Y/m/d') }}
+                            @else
+                                {{ date('Y/m/d') }}
+                            @endif
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -61,50 +80,43 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-b">
-                    <td class="p-2 font-bold">Item 1</td>
-                    <td class="p-2 text-right">2</td>
-                    <td class="p-2 text-right">$150.00</td>
-                    <td class="p-2 text-right">$300.00</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="p-2 font-bold">Item 2</td>
-                    <td class="p-2 text-right">3</td>
-                    <td class="p-2 text-right">$200.00</td>
-                    <td class="p-2 text-right">$600.00</td>
-                </tr>
-                <tr class="border-b">
-                    <td class="p-2 font-bold">Item 3</td>
-                    <td class="p-2 text-right">1</td>
-                    <td class="p-2 text-right">$180.00</td>
-                    <td class="p-2 text-right">$180.00</td>
-                </tr>
+                @foreach ($order->items as $item)
+                    <tr class="border-b">
+                        <td class="p-2 font-bold">{{ $item->product->name }}</td>
+                        <td class="p-2 text-right">{{ $item->quantity }}</td>
+                        <td class="p-2 text-right">{{ $item->unit_amount }}</td>
+                        <td class="p-2 text-right">{{ $item->total_amount }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
-    @endforelse
-
-    <div class="flex justify-end">
-        <div class="w-1/2">
-            <div class="flex justify-between border-b py-2">
-                <span class="font-bold">Subtotal:</span>
-                <span>$1080.00</span>
-            </div>
-            <div class="flex justify-between border-b py-2">
-                <span>Discount (5%):</span>
-                <span>($54.00)</span>
-            </div>
-            <div class="flex justify-between border-b py-2">
-                <span>Sales Tax (10%):</span>
-                <span>$102.60</span>
-            </div>
-            <div class="flex justify-between font-bold text-lg py-2">
-                <span>Total:</span>
-                <span>$1128.60</span>
-            </div>
-            <div class="flex justify-between font-bold text-lg py-2">
-                <span>Amount Due (USD):</span>
-                <span>$1128.60</span>
+        <div class="flex justify-end">
+            <div class="w-1/2">
+                <div class="flex justify-between border-b py-2">
+                    <span class="font-bold">Subtotal:</span>
+                    <span>{{ Number::currency($order->grand_total, $order->currency ?? 'USD') }}</span>
+                </div>
+                <div class="flex justify-between border-b py-2">
+                    <span>Discount (5%):</span>
+                    <span>{{ Number::currency($a = number_format($order->grand_total * 0.05, 2), $order->currency ?? 'USD') }}
+                    </span>
+                </div>
+                <div class="flex justify-between border-b py-2">
+                    <span>Sales Tax (10%):</span>
+                    <span>{{ Number::currency($b = number_format($order->grand_total * 0.1, 2), $order->currency ?? 'USD') }}</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg py-2">
+                    <span>Total:</span>
+                    <span>{{ Number::currency($order->grand_total, $order->currency ?? 'USD') }}</span>
+                </div>
+                <div class="flex justify-between font-bold text-lg py-2">
+                    <span>Amount Due (USD):</span>
+                    <span>{{ Number::currency($order->grand_total - $a + $b, 'USD') }}</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+</body>
+
+</html>

@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Storage;
 
 class InvoicePdfController extends Controller
 {
-
-    public function __invoke(Order $invoice_data)
+    public function __invoke(Order $order)
     {
+
         $invoice_configuration = Invoice::where('user_id', auth()->user()->id)->first();
 
         $font = $invoice_configuration->font->getLabel();
@@ -21,7 +21,9 @@ class InvoicePdfController extends Controller
         $logo = $invoice_configuration->logo;
         $show_logo = $invoice_configuration->show_logo;
 
-        $data = compact('font', 'color', 'logo', 'show_logo', 'invoice_data');
+        $data = compact('font', 'color', 'logo', 'show_logo', 'order');
+
+        $pdfPath = Storage::disk('public')->path("invoice_{$order->id}.pdf");
 
         Pdf::view('invoice-generator', $data)
             ->withBrowsershot(function (Browsershot $browsershot) {
@@ -31,6 +33,11 @@ class InvoicePdfController extends Controller
                     ->noSandbox();
             })
             ->format('a4')
-            ->save(Storage::disk('public')->path("invoice.pdf"));
+            ->save($pdfPath);
+
+        return response()->file($pdfPath, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="invoice.pdf"'
+        ])->deleteFileAfterSend(true);
     }
 }

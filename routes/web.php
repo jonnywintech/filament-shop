@@ -32,7 +32,7 @@ Route::get('/contact', ContactUs::class);
 Route::get('/blog', Blog::class);
 Route::get('/blog/{slug}', Post::class);
 
-Route::get('/generate-pdf', InvoicePdfController::class)->name('generate.pdf');
+Route::get('/generate-pdf/{order}', InvoicePdfController::class)->name('generate.pdf');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', RegisterPage::class)->name('register');

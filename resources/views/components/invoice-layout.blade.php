@@ -8,6 +8,10 @@
         .accent {
             background-color: {{ $color }};
         }
+
+        .accent__border {
+            border-color: {{ $color }};
+        }
     </style>
     <div class="flex flex-col md:flex-row">
         <div class="md:w-1/2 p-4">
@@ -21,7 +25,7 @@
             <h2 class="text-2xl pt-2 pe-3 pb-4 text-end dark:text-white">{{ env('APP_NAME') }}</h2>
         </div>
     </div>
-    <hr class="dark:border-white">
+    <hr class="dark:border-white accent__border">
     <h1 class="text-6xl py-5 pb-10 text-start dark:text-white">Invoice</h1>
     <h3 class="text-2xl dark:text-white">BILL TO</h3>
     @forelse ($invoice_data as $djata)
@@ -62,19 +66,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-b">
+                <tr class="border-b accent__border">
                     <td class="p-2 font-bold">Item 1</td>
                     <td class="p-2 text-right">2</td>
                     <td class="p-2 text-right">$150.00</td>
                     <td class="p-2 text-right">$300.00</td>
                 </tr>
-                <tr class="border-b">
+                <tr class="border-b accent__border">
                     <td class="p-2 font-bold">Item 2</td>
                     <td class="p-2 text-right">3</td>
                     <td class="p-2 text-right">$200.00</td>
                     <td class="p-2 text-right">$600.00</td>
                 </tr>
-                <tr class="border-b">
+                <tr class="border-b accent__border">
                     <td class="p-2 font-bold">Item 3</td>
                     <td class="p-2 text-right">1</td>
                     <td class="p-2 text-right">$180.00</td>

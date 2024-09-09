@@ -15,7 +15,7 @@ class ViewOrder extends ViewRecord
     {
         return [
             Actions\Action::make('Process Order')
-            ->url(fn(Order $order) => route('generate.pdf', $order))
+            ->url(fn(Order $order) => route('generate.pdf', $order->id))
             ->openUrlInNewTab(),
             Actions\EditAction::make(),
         ];
