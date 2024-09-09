@@ -9,9 +9,9 @@
             background-color: {{ $color }};
         }
 
-        .accent__border {
+        /* .accent__border {
             border-color: {{ $color }};
-        }
+        } */
     </style>
     <div class="flex flex-col md:flex-row">
         <div class="md:w-1/2 p-4">
