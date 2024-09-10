@@ -27,9 +27,9 @@ class InvoicePdfController extends Controller
 
         Pdf::view('invoice-generator', $data)
             ->withBrowsershot(function (Browsershot $browsershot) {
-                $browsershot->setNodeBinary("C:\\laragon\\bin\\nodejs\\node-v20.15.0-win-x64\\node.exe")
-                    ->setNpmBinary("C:\\laragon\\bin\\nodejs\\node-v20.15.0-win-x64\\node_modules\\npm\\bin")
-                    ->setNodeModulePath("C:\\laragon\\www\\filament-shop\\node_modules")
+                $browsershot->setNodeBinary(env('NODE_BINARY_PATH'))
+                    ->setNpmBinary(env('NPM_BINARY_PATH'))
+                    ->setNodeModulePath(env('NODE_MODULES_PATH'))
                     ->noSandbox();
             })
             ->format('a4')
