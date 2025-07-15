@@ -63,7 +63,7 @@
                             @if ($order->payment_status === 'paid')
                                 {{ \Carbon\Carbon::parse($order->created_at)->format('Y/m/d') }}
                             @else
-                            {{ \Carbon\Carbon::parse($order->created_at)->addDays(7)->format('Y/m/d') }}
+                                {{ \Carbon\Carbon::parse($order->created_at)->addDays(7)->format('Y/m/d') }}
                             @endif
                         </span>
                     </li>
@@ -98,12 +98,17 @@
                 </div>
                 <div class="flex justify-between border-b py-2">
                     <span>Discount (5%):</span>
-                    <span>{{ Number::currency($a = number_format($order->grand_total * 0.05, 2), $order->currency ?? 'USD') }}
-                    </span>
+                    @php
+                        $a = $order->grand_total * 0.05;
+                    @endphp
+                    <span>{{ Number::currency($a, $order->currency ?? 'USD') }}</span>
                 </div>
                 <div class="flex justify-between border-b py-2">
                     <span>Sales Tax (10%):</span>
-                    <span>{{ Number::currency($b = number_format($order->grand_total * 0.1, 2), $order->currency ?? 'USD') }}</span>
+                    @php
+                        $b = $order->grand_total * 0.1;
+                    @endphp
+                    <span>{{ Number::currency($b, $order->currency ?? 'USD') }}</span>
                 </div>
                 <div class="flex justify-between font-bold text-lg py-2">
                     <span>Total:</span>
@@ -113,6 +118,7 @@
                     <span>Amount Due (USD):</span>
                     <span>{{ Number::currency($order->grand_total - $a + $b, 'USD') }}</span>
                 </div>
+
             </div>
         </div>
     </div>

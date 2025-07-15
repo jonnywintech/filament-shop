@@ -57,6 +57,9 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
+        if(app()->environment('local')){
+            return true;
+        }
         return count($this->getAllPermissions()) > 0;
     }
 

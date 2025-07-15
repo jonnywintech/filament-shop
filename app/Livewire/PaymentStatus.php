@@ -18,6 +18,7 @@ class PaymentStatus extends Component
             'pending' => 'bg-yellow-500',
             'paid' => 'bg-green-500',
             'failed' => 'bg-red-500',
+            'Completed' => 'bg-green-400',
         };
     }
     public function render()
